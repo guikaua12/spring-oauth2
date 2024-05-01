@@ -1,5 +1,6 @@
 package me.approximations.security.entities;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.approximations.entities.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @RequiredArgsConstructor
+@Getter
 public class SecurityUserDetails implements UserDetails {
     private final User user;
 
