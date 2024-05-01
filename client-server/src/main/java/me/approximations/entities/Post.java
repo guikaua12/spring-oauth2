@@ -3,6 +3,8 @@ package me.approximations.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
+
 @AllArgsConstructor
 @NoArgsConstructor(force=true)
 @Getter
@@ -19,4 +21,7 @@ public class Post {
 
     @ManyToOne
     private final User author;
+
+    @Column(name = "created_at")
+    private final Instant createdAt;
 }
