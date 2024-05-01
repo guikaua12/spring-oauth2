@@ -3,6 +3,7 @@ package me.approximations.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import me.approximations.entities.enums.AccountType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,8 @@ public class User {
     private String email;
     @JsonIgnore
     private String password;
+    @Enumerated(EnumType.STRING)
+    private final AccountType accountType;
 
     @JsonIgnore
     @OneToMany(mappedBy="author")
