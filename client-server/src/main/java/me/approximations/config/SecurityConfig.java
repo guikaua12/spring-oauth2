@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.NoOpAuthenticationEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,10 +33,10 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(c ->
                         c.requestMatchers("/auth/**").anonymous()
+                                .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(c -> c.authenticationEntryPoint(new NoOpAuthenticationEntryPoint())) // If i remove this, for some reason Method Not Allowed (405) exceptions are not catch :/
                 .build();
     }
 
