@@ -28,7 +28,7 @@ public class SecurityConfig {
         return http
                 .cors(Customizer.withDefaults())
                 .oauth2Login(c ->
-                        c.loginPage("/") // disable login page
+                        c.loginPage("http://localhost:3000/login") // disable login page
                                 .successHandler(oauth2SuccessLoginHandler)
                 )
                 .authorizeHttpRequests(c ->
