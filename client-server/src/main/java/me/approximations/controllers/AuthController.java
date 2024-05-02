@@ -19,7 +19,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public User register(@RequestBody @Valid UserRegisterDTO dto) {
-        return userDetailsService.createUser(dto);
+        return userDetailsService.registerUser(dto);
     }
 
     @PostMapping("/login")

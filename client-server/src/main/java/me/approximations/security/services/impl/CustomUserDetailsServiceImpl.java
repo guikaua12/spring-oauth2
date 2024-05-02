@@ -39,7 +39,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     }
 
     @Override
-    public User createUser(@Valid UserRegisterDTO dto) {
+    public User registerUser(@Valid UserRegisterDTO dto) {
         final Optional<User> userByEmail = userRepository.findUserByEmail(dto.email());
         if (userByEmail.isPresent()) {
             throw new UserAlreadyExistsException();
@@ -50,12 +50,24 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     }
 
     @Override
-    public User createUserOauth(UserOauthRegisterDTO dto) {
+    public User registerUserOauth(UserOauthRegisterDTO dto) {
         final Optional<User> userByEmail = userRepository.findUserByEmail(dto.email());
         if (userByEmail.isPresent()) {
             throw new UserAlreadyExistsException();
         }
 
+        final User user = new User(null, dto.name(), dto.email(), null, AccountType.GOOGLE);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User createUser(@Valid UserRegisterDTO dto) {
+        final User user = new User(null, dto.name(), dto.email(), passwordEncoder.encode(dto.password()), AccountType.SELF);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User createUserOauth(UserOauthRegisterDTO dto) {
         final User user = new User(null, dto.name(), dto.email(), null, AccountType.GOOGLE);
         return userRepository.save(user);
     }

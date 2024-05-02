@@ -1,5 +1,6 @@
 package me.approximations.config;
 
+import me.approximations.security.handlers.Oauth2SuccessLoginHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +24,13 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, Oauth2SuccessLoginHandler oauth2SuccessLoginHandler) throws Exception {
+
         return http
                 .cors(Customizer.withDefaults())
                 .oauth2Login(c ->
                         c.loginPage("/") // disable login page
-                                .successHandler((request, response, authentication) -> {
-                                    System.out.println();
-                                })
+                                .successHandler(oauth2SuccessLoginHandler)
                 )
                 .authorizeHttpRequests(c ->
                         c.requestMatchers("/auth/**").anonymous()

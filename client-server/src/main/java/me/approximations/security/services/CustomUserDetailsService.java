@@ -12,6 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public interface CustomUserDetailsService extends UserDetailsService {
     UserDetails loadUserByEmail(String email) throws UsernameNotFoundException;
 
+    User registerUser(UserRegisterDTO dto);
+
+    User registerUserOauth(UserOauthRegisterDTO dto);
+
     User createUser(UserRegisterDTO dto);
 
     User createUserOauth(UserOauthRegisterDTO dto);
