@@ -38,6 +38,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(c ->
                         c.requestMatchers("/auth/**").anonymous()
+                                .requestMatchers("/user/me").authenticated()
                                 .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 )
