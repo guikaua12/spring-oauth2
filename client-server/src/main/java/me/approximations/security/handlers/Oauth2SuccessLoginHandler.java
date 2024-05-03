@@ -30,6 +30,7 @@ public class Oauth2SuccessLoginHandler implements AuthenticationSuccessHandler {
     private String successLoginRedirectUrl;
     private final JwtTokenService jwtTokenService;
     private final CustomUserDetailsService userDetailsService;
+    private final JwtTokenCookieHeaderSetter tokenCookieSetter;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -44,7 +45,7 @@ public class Oauth2SuccessLoginHandler implements AuthenticationSuccessHandler {
 
         final String token = jwtTokenService.generateToken(userDetails);
 
-        response.setHeader(HttpHeaders.SET_COOKIE, String.format("token=%s; Max-Age=86400; Path=/", token));
+        tokenCookieSetter.set(response, token);
 
         REDIRECT_STRATEGY.sendRedirect(request, response, successLoginRedirectUrl);
     }
