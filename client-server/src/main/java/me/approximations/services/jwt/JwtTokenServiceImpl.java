@@ -2,6 +2,7 @@ package me.approximations.services.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -38,7 +39,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public DecodedJWT decodeToken(String token) {
+    public DecodedJWT decodeToken(String token) throws JWTVerificationException {
         return JWT.require(this.algorithm)
                 .withIssuer(ISSUER)
                 .build()
