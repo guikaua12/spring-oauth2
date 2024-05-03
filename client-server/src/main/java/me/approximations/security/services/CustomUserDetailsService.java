@@ -5,12 +5,12 @@ import me.approximations.dtos.UserLoginDTO;
 import me.approximations.dtos.UserOauthRegisterDTO;
 import me.approximations.dtos.UserRegisterDTO;
 import me.approximations.entities.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import me.approximations.security.entities.SecurityUserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface CustomUserDetailsService extends UserDetailsService {
-    UserDetails loadUserByEmail(String email) throws UsernameNotFoundException;
+    SecurityUserDetails loadUserByEmail(String email) throws UsernameNotFoundException;
 
     User registerUser(UserRegisterDTO dto);
 
