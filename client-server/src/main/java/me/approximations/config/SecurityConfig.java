@@ -1,5 +1,7 @@
 package me.approximations.config;
 
+import me.approximations.security.filters.JwtTokenFilter;
+import me.approximations.security.handlers.CustomAuthenticationEntryPoint;
 import me.approximations.security.handlers.Oauth2SuccessLoginHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -23,10 +26,12 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, Oauth2SuccessLoginHandler oauth2SuccessLoginHandler) throws Exception {
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, Oauth2SuccessLoginHandler oauth2SuccessLoginHandler,
+                                                   JwtTokenFilter jwtTokenFilter, CustomAuthenticationEntryPoint authenticationEntryPoint
+    ) throws Exception {
         return http
                 .cors(Customizer.withDefaults())
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(c ->
                         c.loginPage("http://localhost:3000/login") // disable login page
                                 .successHandler(oauth2SuccessLoginHandler)
@@ -36,6 +41,7 @@ public class SecurityConfig {
                                 .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 )
+                .exceptionHandling(c -> c.authenticationEntryPoint(authenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
