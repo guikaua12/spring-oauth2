@@ -1,4 +1,4 @@
-package me.approximations.security.filters;
+package me.approximations.security.jwt.filter;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -9,10 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.approximations.security.entities.SecurityUserDetails;
 import me.approximations.security.handlers.CustomAuthenticationEntryPoint;
+import me.approximations.security.jwt.service.JwtTokenService;
+import me.approximations.security.jwt.token.JwtAuthenticationToken;
 import me.approximations.security.services.CustomUserDetailsService;
-import me.approximations.security.token.JwtAuthenticationToken;
-import me.approximations.services.jwt.JwtTokenService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

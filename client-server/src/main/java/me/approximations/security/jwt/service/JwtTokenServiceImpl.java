@@ -1,4 +1,4 @@
-package me.approximations.services.jwt;
+package me.approximations.security.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

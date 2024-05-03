@@ -1,8 +1,8 @@
 package me.approximations.config;
 
-import me.approximations.security.filters.JwtTokenFilter;
 import me.approximations.security.handlers.CustomAuthenticationEntryPoint;
 import me.approximations.security.handlers.Oauth2SuccessLoginHandler;
+import me.approximations.security.jwt.filter.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

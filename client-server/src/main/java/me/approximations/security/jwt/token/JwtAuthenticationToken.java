@@ -1,4 +1,4 @@
-package me.approximations.security.token;
+package me.approximations.security.jwt.token;
 
 import lombok.AllArgsConstructor;
 import me.approximations.security.entities.SecurityUserDetails;
