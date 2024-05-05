@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 const Page = () => {
     useEffect(() => {
         if (window.opener) {
-            window.opener.location.reload();
+            window.opener.location.href = "/";
             window.close();
         }
     }, []);

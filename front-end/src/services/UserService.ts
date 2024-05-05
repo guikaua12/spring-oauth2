@@ -1,4 +1,5 @@
 import { api } from "@/services/api";
+import { User } from "@/types/User";
 
 export type LoginParams = {
     email: string;
@@ -17,4 +18,9 @@ export type RegisterParams = {
 
 export async function register({ name, email, password }: RegisterParams): Promise<void> {
     await api.post("/auth/register", { name, email, password });
+}
+
+export async function userInfo(): Promise<User> {
+    const response = await api.get("/user/me");
+    return response.data;
 }
