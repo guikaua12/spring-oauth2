@@ -43,6 +43,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = async () => {
         Cookies.remove("token");
         await queryClient.invalidateQueries({ queryKey: ["user"] });
+        loginMutation.reset();
+        registerMutation.reset();
         push("/auth/login");
     };
 
