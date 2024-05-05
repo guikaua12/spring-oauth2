@@ -6,25 +6,25 @@ import Button from "@/components/Button/button";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/feature/auth/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
-const LoginSchema = z.object({
+const RegisterSchema = z.object({
+    name: z.string().min(1),
     email: z.string().email(),
     password: z.string().min(1),
 });
 
-type LoginSchemaType = z.infer<typeof LoginSchema>;
+type RegisterSchemaType = z.infer<typeof RegisterSchema>;
 
-const LoginForm = () => {
-    const { register, handleSubmit } = useForm<LoginSchemaType>({
-        resolver: zodResolver(LoginSchema),
+const RegisterForm = () => {
+    const { register, handleSubmit } = useForm<RegisterSchemaType>({
+        resolver: zodResolver(RegisterSchema),
     });
-
+    const { register: authRegister, login } = useAuth();
     const { push } = useRouter();
-    const { login } = useAuth();
 
-    const onSubmit = ({ email, password }: LoginSchemaType) => {
+    const onRegister = ({ email, password }: RegisterSchemaType) => {
         login.mutate(
             { email, password },
             {
@@ -35,8 +35,18 @@ const LoginForm = () => {
         );
     };
 
+    const onSubmit = ({ name, email, password }: RegisterSchemaType) => {
+        authRegister.mutate(
+            { name, email, password },
+            {
+                onSuccess: () => onRegister({ name, email, password }),
+            }
+        );
+    };
+
     return (
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+            <Input placeholder="Name" type="text" className="mb-2" hookFormRegister={() => register("name")} />
             <Input placeholder="Email" type="email" className="mb-2" hookFormRegister={() => register("email")} />
             <Input
                 placeholder="Password"
@@ -46,15 +56,15 @@ const LoginForm = () => {
             />
 
             <span className="mb-2 text-sm">
-                <span>Don’t have an account? </span>
-                <Link className="font-semibold text-teal-500" href="/auth/register">
-                    Sign up!
+                <span>Have an account? </span>
+                <Link className="font-semibold text-teal-500" href="/auth/login">
+                    Sign in!
                 </Link>
             </span>
 
-            <Button>LOG IN</Button>
+            <Button>SIGN UP</Button>
         </form>
     );
 };
 
-export default LoginForm;
+export default RegisterForm;

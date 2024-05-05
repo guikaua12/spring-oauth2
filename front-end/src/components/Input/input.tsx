@@ -10,7 +10,7 @@ const Input = ({ className, hookFormRegister = () => {}, ...props }: Props) => {
     return (
         <input
             className={twMerge(
-                "text-zinc-00 rounded-lg border border-zinc-300 bg-white p-5 text-sm placeholder-zinc-600 outline-0 focus:border-teal-500",
+                "rounded-lg border border-zinc-300 bg-white p-5 text-sm text-zinc-600 placeholder-zinc-600 outline-0 focus:border-teal-500",
                 className
             )}
             {...hookFormRegister()}

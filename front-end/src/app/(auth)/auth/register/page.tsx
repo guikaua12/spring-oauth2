@@ -1,13 +1,40 @@
+"use client";
 import React from "react";
 import AuthProviderButton from "@/components/AuthProviderButton/auth-provider-button";
-import Input from "@/components/Input/input";
-import Button from "@/components/Button/button";
-import Link from "next/link";
+import RegisterForm from "@/feature/auth/RegisterForm/register-form";
+import { useAuth } from "@/feature/auth/hooks/useAuth";
+import Warning from "@/components/Warning/warning";
+
+type Status = "error" | "success" | "idle" | "pending";
+
+const getWarningType = (status: Status): "success" | "error" => {
+    if (status === "success") return "success";
+    if (status === "error") return "error";
+    return "success";
+};
+
+const warningOpened = (status: Status) => {
+    return status === "success" || status === "error";
+};
 
 const RegisterPage = () => {
+    const { register } = useAuth();
+
+    const warningContent = (): string => {
+        if (register.isSuccess) return "Registered succesfully";
+        if (register.error && register.error.response) {
+            return register.error.response.data.message ?? register.error.response.data.error;
+        }
+
+        return "Unknown error";
+    };
+
     return (
         <div className="flex h-screen items-center justify-center">
             <main className="w-96">
+                <Warning open={warningOpened(register.status)} className="mb-2" type={getWarningType(register.status)}>
+                    {warningContent()}
+                </Warning>
                 <h1 className="text-center text-3xl font-semibold">Create your account</h1>
                 <p className="text-center font-medium">Sign up into your account</p>
 
@@ -22,20 +49,7 @@ const RegisterPage = () => {
                 </div>
 
                 <div className="mt-6 flex flex-col">
-                    <div className="flex flex-col">
-                        <Input placeholder="Name" type="text" className="mb-2" />
-                        <Input placeholder="Email" type="email" className="mb-2" />
-                        <Input placeholder="Password" type="password" className="mb-0.5" />
-
-                        <span className="mb-2 text-sm">
-                            <span>Have an account? </span>
-                            <Link className="font-semibold text-teal-500" href="/auth/login">
-                                Sign in!
-                            </Link>
-                        </span>
-
-                        <Button>LOG IN</Button>
-                    </div>
+                    <RegisterForm />
                 </div>
             </main>
         </div>
