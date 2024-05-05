@@ -3,7 +3,6 @@ package me.approximations.security.services.impl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.approximations.dtos.UserLoginDTO;
-import me.approximations.dtos.UserOauthRegisterDTO;
 import me.approximations.dtos.UserRegisterDTO;
 import me.approximations.entities.User;
 import me.approximations.entities.enums.AccountType;
@@ -15,6 +14,7 @@ import me.approximations.security.services.CustomUserDetailsService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -45,30 +45,30 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
             throw new UserAlreadyExistsException();
         }
 
-        final User user = new User(null, dto.name(), dto.email(), passwordEncoder.encode(dto.password()), AccountType.SELF);
+        final User user = new User(null, dto.name(), dto.email(), passwordEncoder.encode(dto.password()), AccountType.SELF, null);
         return userRepository.save(user);
     }
 
     @Override
-    public User registerUserOauth(UserOauthRegisterDTO dto) {
-        final Optional<User> userByEmail = userRepository.findUserByEmail(dto.email());
+    public User registerUserOauth(OidcUser oidcUser) {
+        final Optional<User> userByEmail = userRepository.findUserByEmail(oidcUser.getEmail());
         if (userByEmail.isPresent()) {
             throw new UserAlreadyExistsException();
         }
 
-        final User user = new User(null, dto.name(), dto.email(), null, AccountType.GOOGLE);
+        final User user = new User(null, oidcUser.getFullName(), oidcUser.getEmail(), null, AccountType.GOOGLE, oidcUser.getPicture());
         return userRepository.save(user);
     }
 
     @Override
     public User createUser(@Valid UserRegisterDTO dto) {
-        final User user = new User(null, dto.name(), dto.email(), passwordEncoder.encode(dto.password()), AccountType.SELF);
+        final User user = new User(null, dto.name(), dto.email(), passwordEncoder.encode(dto.password()), AccountType.SELF, null);
         return userRepository.save(user);
     }
 
     @Override
-    public User createUserOauth(UserOauthRegisterDTO dto) {
-        final User user = new User(null, dto.name(), dto.email(), null, AccountType.GOOGLE);
+    public User createUserOauth(OidcUser oidcUser) {
+        final User user = new User(null, oidcUser.getFullName(), oidcUser.getEmail(), null, AccountType.GOOGLE, oidcUser.getPicture());
         return userRepository.save(user);
     }
 

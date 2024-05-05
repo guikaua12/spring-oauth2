@@ -4,7 +4,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.approximations.dtos.UserOauthRegisterDTO;
 import me.approximations.security.entities.SecurityUserDetails;
 import me.approximations.security.jwt.JwtTokenCookieHeaderSetter;
 import me.approximations.security.jwt.service.JwtTokenService;
@@ -40,7 +39,7 @@ public class Oauth2SuccessLoginHandler implements AuthenticationSuccessHandler {
         try {
             userDetails = userDetailsService.loadUserByEmail(oidcUser.getEmail());
         } catch (UsernameNotFoundException e) {
-            userDetails = new SecurityUserDetails(userDetailsService.createUserOauth(new UserOauthRegisterDTO(oidcUser.getFullName(), oidcUser.getEmail())));
+            userDetails = new SecurityUserDetails(userDetailsService.createUserOauth(oidcUser));
         }
 
         final String token = jwtTokenService.generateToken(userDetails);
