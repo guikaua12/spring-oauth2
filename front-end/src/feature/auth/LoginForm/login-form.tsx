@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/feature/auth/hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 const LoginSchema = z.object({
     email: z.string().email(),
@@ -23,12 +24,14 @@ const LoginForm = () => {
 
     const { push } = useRouter();
     const { login } = useAuth();
+    const queryClient = useQueryClient();
 
     const onSubmit = ({ email, password }: LoginSchemaType) => {
         login.mutate(
             { email, password },
             {
-                onSuccess: () => {
+                onSuccess: async () => {
+                    await queryClient.invalidateQueries({ queryKey: ["user"] });
                     push("/");
                 },
             }

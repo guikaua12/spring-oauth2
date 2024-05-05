@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/feature/auth/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const RegisterSchema = z.object({
     name: z.string().min(1),
@@ -23,12 +24,14 @@ const RegisterForm = () => {
     });
     const { register: authRegister, login } = useAuth();
     const { push } = useRouter();
+    const queryClient = useQueryClient();
 
     const onRegister = ({ email, password }: RegisterSchemaType) => {
         login.mutate(
             { email, password },
             {
-                onSuccess: () => {
+                onSuccess: async () => {
+                    await queryClient.invalidateQueries({ queryKey: ["user"] });
                     push("/");
                 },
             }
