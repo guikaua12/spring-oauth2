@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/feature/query/providers/QueryProvider";
 import { AuthProvider } from "@/feature/auth/providers/AuthProvider";
+import WithAxios from "@/components/WithAxios/with-axios";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default function RootLayout({
         <html lang="pt-br">
             <body className={inter.className}>
                 <QueryProvider>
-                    <AuthProvider>{children}</AuthProvider>
+                    <AuthProvider>
+                        <WithAxios>{children}</WithAxios>
+                    </AuthProvider>
                 </QueryProvider>
             </body>
         </html>
