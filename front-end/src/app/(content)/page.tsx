@@ -9,9 +9,5 @@ export default function Home() {
         setToken(Cookies.get("token"));
     }, []);
 
-    return (
-        <main className="p-4">
-            <p>{JSON.stringify(token)}</p>
-        </main>
-    );
+    return <main className="p-4"></main>;
 }
